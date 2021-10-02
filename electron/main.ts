@@ -6,7 +6,7 @@ const createWindow = async () => {
   // Crate the browser window
   const mainWindow = new BrowserWindow({ width: 1200, height: 1000 });
   if (isDev) {
-    await mainWindow.loadURL("http://localhost:8000/index.html");
+    await mainWindow.loadURL("http://localhost:3000/index.html");
   } else {
     // 'build/index.html'
     await mainWindow.loadURL(`file://${__dirname}/../index.html`);

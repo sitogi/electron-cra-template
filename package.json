@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "license": "UNLICENSED",
   "private": true,
+  "homepage": "./",
   "main": "build/electron/main.js",
   "build": {
     "extends": null,
@@ -31,7 +32,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "electron-builder install-app-deps",
-    "wait-start": "wait-on http://localhost:8000",
+    "wait-start": "wait-on http://localhost:3000",
     "start": "concurrently \"npm run start:start-server\" \"npm run start:watch-electron\" \"npm run start:use-electron\"",
     "start:start-server": "cross-env BROWSER=none react-scripts start",
     "start:watch-electron": "run-s wait-start start:watch-electron:watch",
