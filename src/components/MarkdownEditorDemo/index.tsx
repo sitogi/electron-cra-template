@@ -1,6 +1,5 @@
-// eslint-disable-next-line no-use-before-define
-import React, { useState } from 'react';
-import { Box, Flex, Textarea } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Flex, Text, Textarea, VStack } from '@chakra-ui/react';
 import { gfmStyles } from 'components/MarkdownEditorDemo/githubStyles';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -32,26 +31,43 @@ const CodeBlock: CodeComponent | ReactMarkdownNames = React.memo(({ inline, ...p
 
 export const MarkdownEditorDemo = (): JSX.Element => {
   const [mdStr, setMdStr] = useState('## Minimum Markdown Editor');
+  const [mainTime, setMainTime] = useState('');
+
+  useEffect(() => {
+    window.electronAPI.onReceiveMainTime((event, timeStr: string) => {
+      setMainTime(timeStr);
+    });
+
+    return () => {
+      window.electronAPI.removeOnReceiveMainTime();
+    };
+  }, []);
 
   return (
-    <Flex gridGap="20px">
-      <Textarea
-        css={gfmStyles}
-        rounded="md"
-        h="500px"
-        w="500px"
-        bg="gray.50"
-        p="10px"
-        resize="none"
-        onChange={(event) => setMdStr(event.currentTarget.value)}
-        value={mdStr}
-      />
+    <VStack spacing="20px">
+      <Button colorScheme="teal" onClick={() => window.electronAPI.openDialog('Hello from React!')}>
+        <Text>Open OS dialog via ipcMain</Text>
+      </Button>
+      <Text>{`This time is sent by main: ${mainTime}`}</Text>
+      <Flex gridGap="20px">
+        <Textarea
+          css={gfmStyles}
+          rounded="md"
+          h="500px"
+          w="500px"
+          bg="gray.50"
+          p="10px"
+          resize="none"
+          onChange={(event) => setMdStr(event.currentTarget.value)}
+          value={mdStr}
+        />
 
-      <Box css={gfmStyles} rounded="md" h="500px" w="500px" bg="red.50" p="10px">
-        <ReactMarkdown remarkPlugins={[gfm, remarkBreaks]} components={{ code: CodeBlock }}>
-          {mdStr}
-        </ReactMarkdown>
-      </Box>
-    </Flex>
+        <Box css={gfmStyles} rounded="md" h="500px" w="500px" bg="red.50" p="10px">
+          <ReactMarkdown remarkPlugins={[gfm, remarkBreaks]} components={{ code: CodeBlock }}>
+            {mdStr}
+          </ReactMarkdown>
+        </Box>
+      </Flex>
+    </VStack>
   );
 };

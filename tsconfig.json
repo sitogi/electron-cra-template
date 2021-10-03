@@ -24,7 +24,7 @@
   "include": [
     "src"
   ],
-  "exclude": [
-    "electron/main.ts", "build", "node_modules"]
+  "files": [
+    "@types/renderer.d.ts"
+  ]
 }
-
